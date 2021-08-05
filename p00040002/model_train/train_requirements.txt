@@ -1,0 +1,8 @@
+scikit-learn
+pandas
+h2o==3.32.1.3
+argparse
+h2o==3.32.1.3
+psycopg2-binary
+matplotlib
+
