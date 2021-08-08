@@ -1,0 +1,12 @@
+[DB]
+host=34.64.92.171
+dbname=solar_plant
+user=solar_plant
+password=ionsolarplantdev
+port=5432
+table=["solar_inverter","solar_weather","train"]
+
+[plant]
+sid=0004_0002
+rtu_id_inv=0004_0002_I_0001
+feature=["dc_p", "s_ir", "h_ir", "m_t"]

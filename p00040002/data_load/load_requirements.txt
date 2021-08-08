@@ -1,5 +1,0 @@
-scikit-learn
-pandas
-argparse
-psycopg2-binary
-matplotlib
