@@ -1,8 +1,11 @@
-import kfp
 import kfp.dsl as dsl
-from kfp import components
 import kfp.compiler as compiler
+import argparse
 
+parser = argparse.ArgumentParser()
+args = parser.parse_args("")
+
+args.volume_mount_path = "/data/"
 
 @dsl.pipeline(
     name="data load pipeline",
@@ -19,11 +22,9 @@ def pipeline():
 
     data_op=dsl.ContainerOp(
         name="data load container",
-        image="bellk/load_data:1.2",
-        # command=["sh","-c"],
-        # arguments=["/data/0004_0002_I_0001_plant.csv"],
-        file_outputs={"load_data":"/0004_0002_I_0001_plant.csv"},
-        pvolumes={"/data": data_vop.volume}
+        image="bellk/data_load:1.6",
+        file_outputs={"load_data": args.data_path + "0004_0002_I_0001_plant.csv"},
+        pvolumes={args.volume_mount_path: data_vop.volume}
     )
 
     # read_op=dsl.ContainerOp(
