@@ -1,6 +1,6 @@
 FROM python
 
-COPY . ./data_load
+COPY . /data_load
 
 WORKDIR /data_load
 

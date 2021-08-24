@@ -9,27 +9,37 @@ args = parser.parse_args("")
 conf = configparser.ConfigParser()
 conf.read('info.init')
 
-rtu_id_inv = conf.get('plant', 'rtu_id_inv')
+args.sid = conf.get('plant', 'sid')
+args.rtu_id_inv = conf.get('plant', 'rtu_id_inv')
+args.feature = json.loads(conf.get('plant', 'feature'))
+print("sid:", args.sid + "\nrtu_id_inv:", args.rtu_id_inv + "\n")
+print("features: {}\n".format(args.feature))
 
-args.volume_mount_path = "/data/"
+PVC = "keripv-vol-1/"
+# PVC = "topinfra-pv/"
+data_path = PVC + "topinfra/data/" + args.sid
+model_path = PVC + "topinfra/model/{}/{}".format(args.sid, args.rtu_id_inv)
+original_data = "{}_original.csv".format(args.rtu_id_inv)
+cleaning_data = "{}_Preprocessing.csv".format(args.rtu_id_inv)
 
-load_data = pd.read_csv(args.volume_mount_path + "{}_plant.csv".format(rtu_id_inv), index_col=[0])
+load_data = pd.read_csv(data_path + '/' + original_data, index_col=[0])
 
-def check_missing_value(feature_data):
-    print('Check Count of Missing Value on Each Column:\n{}'.format(feature_data.isnull().sum()))
-    for i in range(len(feature_data.isnull().sum())):
-        if feature_data.isnull().sum()[i] != 0:
-            feature_data = feature_data.dropna(axis=0)
-            print('Drop Missing Value Result:\n{}'.format(feature_data.isnull().sum()))
-    return feature_data
+def check_missing_value(data, col):
+    print('Check Count of Missing Value on Each Column:\n{}'.format(data.isnull().sum()))
+    if data[col].isnull().sum() != 0:
+        nan_row = data[data[col].isnull()]
+        print("Remove Index\n", nan_row.index)
+        data = data.drop(nan_row.index).reset_index(drop=True)
+        print('Drop Missing Value Result:\n{}'.format(data.isnull().sum()))
+    return data
 
 def feature_engineering(data):
-    feature = json.loads(conf.get('plant', 'feature'))
-    print("features: {}".format(feature))
-    plant_feature = data[feature]
-    plant = check_missing_value(plant_feature)
-    print("Preprocessing Finished")
-    plant.to_csv(args.volume_mount_path + "{}_preprocessing.csv".format(rtu_id_inv))
+    plant_feature = data[args.feature]
+    plant = check_missing_value(plant_feature, 'dc_p')
+    print("Persistent Volume Claims:", PVC)
+    print("File Saved:", cleaning_data)
+    print("Volume Container Path:", data_path)
+    plant.to_csv('{}/{}'.format(data_path, cleaning_data))
     return plant
 
 feature_engineering(load_data)
