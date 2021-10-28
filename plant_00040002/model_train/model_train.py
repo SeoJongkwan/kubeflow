@@ -28,7 +28,7 @@ model_path = "../model/"
 volume_container_path = "../rtu/"
 cleaning_data = "{}_Preprocessing.csv".format(args.rtu_id_inv)
 
-PVC = "keripv-vol-1/"
+PVC = "pvmodel-vol-1/"
 # PVC = "topinfra-pv/"
 data_path = PVC + "topinfra/data/" + args.sid
 model_path = PVC + "topinfra/model/{}/{}".format(args.sid, args.rtu_id_inv)

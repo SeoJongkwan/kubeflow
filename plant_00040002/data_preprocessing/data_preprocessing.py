@@ -15,10 +15,9 @@ args.feature = json.loads(conf.get('plant', 'feature'))
 print("sid:", args.sid + "\nrtu_id_inv:", args.rtu_id_inv + "\n")
 print("features: {}\n".format(args.feature))
 
-PVC = "keripv-vol-1/"
-# PVC = "topinfra-pv/"
-data_path = PVC + "topinfra/data/" + args.sid
-model_path = PVC + "topinfra/model/{}/{}".format(args.sid, args.rtu_id_inv)
+PVC = "pvmodel-vol-1/"
+data_path = PVC + "data/" + args.sid
+model_path = PVC + "model/{}/{}".format(args.sid, args.rtu_id_inv)
 original_data = "{}_original.csv".format(args.rtu_id_inv)
 cleaning_data = "{}_Preprocessing.csv".format(args.rtu_id_inv)
 

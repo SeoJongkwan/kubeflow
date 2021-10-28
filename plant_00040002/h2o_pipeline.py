@@ -10,10 +10,9 @@ args = parser.parse_args("")
 args.sid = '0004_0002'
 args.rtu_id_inv = '0004_0002_I_0001'
 
-PVC = "keripv-vol-1/"
-# PVC = "topinfra-pv/"
-data_path = PVC + "topinfra/data/" + args.sid
-model_path = PVC + "topinfra/model/{}/{}".format(args.sid, args.rtu_id_inv)
+PVC = "pvmodel-vol-1/"
+data_path = PVC + "data/" + args.sid
+model_path = PVC + "model/{}/{}".format(args.sid, args.rtu_id_inv)
 original_data = "{}_original.csv".format(args.rtu_id_inv)
 cleaning_data = "{}_Preprocessing.csv".format(args.rtu_id_inv)
 
@@ -32,14 +31,14 @@ def pipeline():
 
     data_op=dsl.ContainerOp(
         name="load data from database",
-        image="bellk/data_load:2.3",
+        image="bellk/data_load:0.1",
         # file_outputs={"PVC": data_path, "original data": original_data},
         pvolumes={data_path: data_vop.volume}
     )
 
     preprocessing_op=dsl.ContainerOp(
         name="loaded data preprocessing",
-        image="bellk/data_preprocessing:2.3",
+        image="bellk/data_preprocessing:0.1",
         # arguments=[data_op.output["load_data"]],
         # file_outputs={"PVC": data_path, "preprocessing data": cleaning_data},
         pvolumes={data_path: data_vop.volume}
@@ -47,7 +46,7 @@ def pipeline():
 
     model_op=dsl.ContainerOp(
         name="model train based h2o library",
-        image="bellk/model_train:2.7",
+        image="bellk/model_train:0.1",
         # file_outputs={"model": model_path},
         pvolumes={model_path: data_vop.volume}
     )

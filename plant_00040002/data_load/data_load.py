@@ -24,10 +24,9 @@ args.rtu_id_inv = conf.get('plant', 'rtu_id_inv')
 print("<Plant Info>")
 print("sid:", args.sid + "\nrtu_id_inv:", args.rtu_id_inv + "\n")
 
-PVC = "keripv-vol-1/"
-# PVC = "topinfra-pv/"
-data_path = PVC + "topinfra/data/" + args.sid
-model_path = PVC + "topinfra/model/{}/{}".format(args.sid, args.rtu_id_inv)
+PVC = "pvmodel-vol-1/"
+data_path = PVC + "data/" + args.sid
+model_path = PVC + "model/{}/{}".format(args.sid, args.rtu_id_inv)
 original_data = "{}_original.csv".format(args.rtu_id_inv)
 
 con = psycopg2.connect(host=host, dbname=dbname, user=user, password=password, port=port)
